@@ -1097,7 +1097,7 @@ impl<'d, T: Instance> Sdmmc<'d, T> {
         InterruptHandler::<T>::enable_interrupts();
         Self::cmd(common_cmd::read_single_block(address), true)?;
 
-        let res = Self::complete_datapath_transfer(true).await;
+        let res = Self::complete_datapath_transfer(false).await;
 
         if res.is_ok() {
             on_drop.defuse();
@@ -1181,7 +1181,7 @@ impl<'d, T: Instance> Sdmmc<'d, T> {
         #[cfg(sdmmc_v2)]
         Self::cmd(common_cmd::write_single_block(address), true)?;
 
-        let res = Self::complete_datapath_transfer(true).await;
+        let res = Self::complete_datapath_transfer(false).await;
 
         match res {
             Ok(_) => {
@@ -1582,7 +1582,7 @@ impl<'d, T: Instance> Sdmmc<'d, T> {
         InterruptHandler::<T>::enable_interrupts();
         Self::cmd(sd_cmd::cmd6(set_function), true)?; // CMD6
 
-        let res = Self::complete_datapath_transfer(true).await;
+        let res = Self::complete_datapath_transfer(false).await;
 
         // Host is allowed to use the new functions at least 8
         // clocks after the end of the switch command
@@ -1642,7 +1642,7 @@ impl<'d, T: Instance> Sdmmc<'d, T> {
         InterruptHandler::<T>::enable_interrupts();
         Self::cmd(sd_cmd::send_scr(), true)?;
 
-        let res = Self::complete_datapath_transfer(true).await;
+        let res = Self::complete_datapath_transfer(false).await;
 
         if res.is_ok() {
             on_drop.defuse();
@@ -1688,7 +1688,7 @@ impl<'d, T: Instance> Sdmmc<'d, T> {
         InterruptHandler::<T>::enable_interrupts();
         Self::cmd(sd_cmd::sd_status(), true)?;
 
-        let res = Self::complete_datapath_transfer(true).await;
+        let res = Self::complete_datapath_transfer(false).await;
 
         if res.is_ok() {
             on_drop.defuse();
@@ -1738,7 +1738,7 @@ impl<'d, T: Instance> Sdmmc<'d, T> {
         InterruptHandler::<T>::enable_interrupts();
         Self::cmd(emmc_cmd::send_ext_csd(), true)?;
 
-        let res = Self::complete_datapath_transfer(true).await;
+        let res = Self::complete_datapath_transfer(false).await;
 
         if res.is_ok() {
             on_drop.defuse();
